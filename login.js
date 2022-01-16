@@ -18,7 +18,7 @@ Vue.createApp({
             .then(res=>{
                 console.log(res)
                 document.cookie = `token=${res.data.token}`
-                window.location.href = 'products.html' //跳轉到商品頁面
+                window.location.href = "products.html" //跳轉到商品頁面
             })
             .catch(error=>{console.log(error);})
         }

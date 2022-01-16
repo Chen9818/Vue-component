@@ -12,51 +12,79 @@
   </head>
   <body>
     <div class="container">
-      <div id="app" class="container">
-        <table class="table mt-4">
-          <thead>
-            <tr>
-              <th>產品名稱</th>
-              <th width="120">
-                原價
-              </th>
-              <th width="120">
-                售價
-              </th>
-              <th width="150">
-                是否啟用
-              </th>
-              <th width="120">
-                刪除
-              </th>
-            </tr>
-          </thead>
-          <tbody id="productList">
-            <tr>
-              <td>範例標題</td>
-              <td width="120">
-                範例原價
-              </td>
-              <td width="120">
-                範例價格
-              </td>
-              <td width="100">
-                <span class="">範例啟用狀態</span>
-              </td>
-              <td width="120">
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline-danger move deleteBtn"
-                  data-action="remove"
-                  data-id=""
-                >
-                  刪除
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <p>目前有 <span id="productCount">0</span> 項產品</p>
+      <div id="app">
+        <div class="container">
+          <div class="row py-3">
+            <div class="col-md-6">
+              <h2>產品列表</h2>
+              <table class="table table-hover mt-4">
+                <thead>
+                  <tr>
+                    <th width="150">產品名稱</th>
+                    <th width="120">
+                      原價
+                    </th>
+                    <th width="120">
+                      售價
+                    </th>
+                    <th width="150">
+                      是否啟用
+                    </th>
+                    <th width="120">
+                      查看細節
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td width="150">{{ }}</td>
+                    <td width="120">
+                      {{ }}
+                    </td>
+                    <td width="120">
+                      {{ }}
+                    </td>
+                    <td width="150">
+                      <span class="text-success">啟用</span>
+                      <span>未啟用</span>
+                    </td>
+                    <td width="120">
+                      <button type="button" class="btn btn-primary">
+                        查看細節
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>目前有 <span>{{ allProducts.length }}</span> 項產品</p>
+            </div>
+            <div class="col-md-6">
+              <h2>單一產品細節</h2>
+              <template>
+                <div class="card mb-3">
+                  <img src="" class="card-img-top primary-image" alt="主圖" />
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      {{ }}
+                      <span class="badge bg-primary ms-2">{{ }}</span>
+                    </h5>
+                    <p class="card-text">商品描述：{{ }}</p>
+                    <p class="card-text">商品內容：{{ }}</p>
+                    <div class="d-flex">
+                      <p class="card-text me-2">{{ }}</p>
+                      <p class="card-text text-secondary"><del>{{ }}</del></p>
+                      {{ }} / 元
+                    </div>
+                  </div>
+                </div>
+                <template>
+                  <img src="" alt="" class="images m-2" />
+                </template>
+              </template>
+              <p class="text-secondary">請選擇一個商品查看</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <script
@@ -64,6 +92,7 @@
       integrity="sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=="
       crossorigin="anonymous"
     ></script>
+    <script src="https://unpkg.com/vue@next"></script>
     <script src="/products.js"></script>
   </body>
 </html>

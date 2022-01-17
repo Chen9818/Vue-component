@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>圖片上傳區</h1>
+    <p>
+      圖片經此上傳區後，得到imageUrl，再帶入管理控制台-產品(https://vue3-course-api.hexschool.io/v2/api/wei-z/admin/product)
+    </p>
+    <input type="file" name="" id="file" />
+  </body>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.js"
+    integrity="sha512-Kg0CewqPNO/ziOJuCq5eyl3P/V6OLz/Lb1I2m+yKS3lHZcGVFN/KOew18rWP+kTsL7haYdaqGjwHQCZrN0heLQ=="
+    crossorigin="anonymous"
+  ></script>
+  <script src="./token.js"></script>
+  <script>
+    let url = "https://vue3-course-api.hexschool.io/v2";
+    const apiPath = "wei-z";
+    const fileInput = document.querySelector("#file");
+    fileInput.addEventListener("change", upload);
+    function upload() {
+      console.dir(fileInput);
+      const file = fileInput.files[0];
+      //   console.log(file);
+
+      const formData = new FormData();
+      formData.append("file-to-upload", file); //上傳圖片api
+
+      axios
+        .post(`${url}/api/${apiPath}/admin/upload`, formData)
+        .then((res) => {
+          console.log(res);
+          alert("圖片上傳成功");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  </script>
+</html>

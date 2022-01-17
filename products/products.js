@@ -3,7 +3,8 @@ Vue.createApp({
     return {
       url:"https://vue3-course-api.hexschool.io/v2",
       apiPath:"wei-z",
-      allProducts:[]
+      allProducts:[],
+      showProduct:[]
     }
   },
   methods: {
@@ -14,7 +15,7 @@ Vue.createApp({
         this.getProducts()
       })
       .catch((error)=>{
-        console.log(error);
+        console.log(error.response);
         window.location.href = "login.html"
         alert("url出錯")
       })
@@ -33,7 +34,8 @@ Vue.createApp({
     }
   },
   mounted() {
-    const token = ('; '+document.cookie).split(`; COOKIE_NAME=`).pop().split(';')[3].split("token=")[1];
+    // const token = ('; '+document.cookie).split(`; COOKIE_NAME=`).pop().split(';')[3].split("token=")[1];
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
     axios.defaults.headers.common['Authorization'] = token
     // console.log(token);
     this.checkLogin()

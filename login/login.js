@@ -9,7 +9,7 @@ Vue.createApp({
     },
     methods: {
         login(){
-            url = "https://vue3-course-api.hexschool.io/v2/admin/signin"
+            let url = "https://vue3-course-api.hexschool.io/v2/admin/signin"
             axios({
                 method:"post",
                 url:url,
@@ -17,8 +17,9 @@ Vue.createApp({
             })
             .then(res=>{
                 console.log(res)
-                document.cookie = `token=${res.data.token}`
-                window.location.href = "products.html" //跳轉到商品頁面
+                const { token, expired } = res.data;
+                document.cookie = `token=${token};expires=${new Date(expired)}; path=/`;
+                window.location.href = "../products/products.html" //跳轉到商品頁面
             })
             .catch(error=>{console.log(error);})
         }

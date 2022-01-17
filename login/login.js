@@ -2,8 +2,8 @@ Vue.createApp({
     data() {
         return {
             user:{
-                "username": "wwenba2k@gmail.com",
-                "password": "a878702487"
+                "username": "",
+                "password": ""
               }
         }
     },

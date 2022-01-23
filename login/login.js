@@ -4,7 +4,7 @@ Vue.createApp({
             user:{
                 "username": "",
                 "password": ""
-              }
+            }
         }
     },
     methods: {

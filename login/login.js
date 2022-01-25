@@ -21,10 +21,9 @@ Vue.createApp({
                 document.cookie = `token=${token};expires=${new Date(expired)}; path=/`;
                 window.location.href = "../products/products.html" //跳轉到商品頁面
             })
-            .catch(error=>{console.log(error);})
+            .catch(error=>{
+                alert(error.data.message)
+            })
         }
-    },
-    mounted() {
-
     },
 }).mount("#app")

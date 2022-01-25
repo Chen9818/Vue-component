@@ -66,7 +66,8 @@
                       <button
                         type="button"
                         class="btn btn-success"
-                        @click="showProduct = item"
+                        @click="showProduct = 
+                        item"
                       >
                         查看細節
                       </button>
@@ -137,7 +138,7 @@
         </div>
 
         
-      <!--modal-->
+      <!--create-Modal  and edit-Modal-->
       <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -245,18 +246,19 @@
                         <input type="text" class="form-control" id="image" v-model="tempProduct.imageUrl">
                         <img class="img-fluid" :src="tempProduct.imageUrl" />
                       </div>
-
+                      
+                      <!--多圖新增(編輯)-->
                       <div class="mb-3" v-if="!isNew && tempProduct.imagesUrl.length>0">
-                        <div class="mb-3" v-for="(item,id) in tempProduct.imagesUrl" :key="item">
+                        <div v-for="(item,id) in tempProduct.imagesUrl" :key="item">
                           <div class="mb-3">
                             <label for="sideImage1" class="form-label">次要圖片{{id+1}}</label>
                             <input type="text" class="form-control" id="sideImage1" v-model="tempProduct.imagesUrl[id]">
                             <img class="img-fluid" :src="item" />
                           </div>
                         </div>
-                        
                       </div>
 
+                      <!--多圖新增(新增產品)-->
                       <div class="mb-3" v-else>
                         <div class="mb-3">
                           <label for="sideImage1" class="form-label">次要圖片1</label>
@@ -284,9 +286,6 @@
                           <img class="img-fluid" :src="tempProduct.imagesUrl[4]" />
                         </div>
                       </div>
-
-
-
                     </div>
                   </div>
                   </div>
@@ -302,7 +301,7 @@
       </div>
 
 
-      <!--delete modal-->
+      <!--delete-Modal-->
       <div
       id="delProductModal"
       ref="delProductModal"
@@ -344,19 +343,7 @@
         </div>
       </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-      </div>
-
+  </div>
 
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js"

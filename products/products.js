@@ -12,8 +12,6 @@ Vue.createApp({
 			tempProduct: {
 				imagesUrl:[],
 			},
-			productModal:"",
-			delProductModal:""
 		}
 	},
 	methods: {
@@ -24,9 +22,8 @@ Vue.createApp({
 					this.getProducts()
 				})
 				.catch((error) => {
-					console.log(error.response)
 					window.location.href = "login.html"
-					alert("url出錯")
+					alert(error.data.message)
 				})
 		},
 		getProducts(){
@@ -36,12 +33,12 @@ Vue.createApp({
 					this.allProducts = res.data.products
 				})
 				.catch((error)=>{
-					console.log(error)
 					window.location.href = "login.html"
-					alert("url或token出錯")
+					alert(error.data.message)
 				})
 		},
     
+		//新增、編輯、刪除
 		openModal(isNew, item) {
 			if (isNew === "new") {
 				this.tempProduct = {
@@ -89,6 +86,7 @@ Vue.createApp({
 		},
 	},
 	mounted() {
+		//利用js操作BS5 modal
 		productModal = new bootstrap.Modal(document.getElementById("productModal"))
 		delProductModal = new bootstrap.Modal(document.getElementById("delProductModal"))
 

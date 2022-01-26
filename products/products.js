@@ -24,7 +24,7 @@ Vue.createApp({
 					this.getProducts()
 				})
 				.catch((error) => {
-					window.location.href = "login.html"
+					window.location.href = "login/login.html"
 					alert(error.data.message)
 				})
 		},
@@ -37,7 +37,7 @@ Vue.createApp({
 					this.showProducts = res.data.products
 				})
 				.catch((error)=>{
-					window.location.href = "login.html"
+					window.location.href = "login/login.html"
 					alert(error.data.message)
 				})
 		},
@@ -50,7 +50,7 @@ Vue.createApp({
 					this.allProducts = res.data.products
 				})
 				.catch((error)=>{
-					window.location.href = "login.html"
+					window.location.href = "login/login.html"
 					alert(error.data.message)
 				})
 		},

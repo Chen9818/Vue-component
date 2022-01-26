@@ -6,9 +6,10 @@ Vue.createApp({
 		return {
 			url:"https://vue3-course-api.hexschool.io/v2",
 			apiPath:"wei-z",
-			allProducts:[],
+			allProducts:"",		//對商品編輯、新增、刪除用
 			isNew: false,
-			showProduct:[],
+			showProducts:[],	//渲染商品表格用
+			showOneProduct:[],	//查詢特定商品細節用
 			tempProduct: {
 				imagesUrl:[],
 			},
@@ -19,6 +20,7 @@ Vue.createApp({
 			axios.post(`${this.url}/api/user/check`)
 				.then((res) => {
 					console.log(res)
+					this.showProduct()
 					this.getProducts()
 				})
 				.catch((error) => {
@@ -26,8 +28,23 @@ Vue.createApp({
 					alert(error.data.message)
 				})
 		},
-		getProducts(){
+
+		//渲染商品表格用(array)
+		showProduct(){
 			axios.get(`${this.url}/api/${this.apiPath}/admin/products`)
+				.then((res)=>{
+					console.log(res)
+					this.showProducts = res.data.products
+				})
+				.catch((error)=>{
+					window.location.href = "login.html"
+					alert(error.data.message)
+				})
+		},
+
+		//對商品編輯、新增、刪除用(object)
+		getProducts(){
+			axios.get(`${this.url}/api/${this.apiPath}/admin/products/all`)
 				.then((res)=>{
 					console.log(res)
 					this.allProducts = res.data.products
@@ -49,12 +66,14 @@ Vue.createApp({
 			} else if (isNew === "edit") {
 				this.tempProduct = { ...item }
 				this.isNew = false
-				productModal.show()
+				productModal.show()     //show出modal，hide隱藏
 			} else if (isNew === "delete") {
 				this.tempProduct = { ...item }
 				delProductModal.show()
 			}
 		},
+
+		//新增、編輯產品
 		updateProduct(){
 			let url = `${this.url}/api/${this.apiPath}/admin/product`
 			let http = "post"
@@ -67,6 +86,7 @@ Vue.createApp({
 				.then((res) => {
 					alert(res.data.message)
 					productModal.hide()
+					this.showProduct()
 					this.getProducts()
 				})
 				.catch((error) => {
@@ -79,10 +99,16 @@ Vue.createApp({
 			axios.delete(url).then((res) => {
 				alert(res.data.message)
 				delProductModal.hide()
+				this.showProduct()
 				this.getProducts()
 			}).catch((error) => {
 				alert(error.data.message)
 			})
+		},
+		createImages() {
+			//編輯產品內新增副圖
+			this.tempProduct.imagesUrl = [];
+			this.tempProduct.imagesUrl.push('');
 		},
 	},
 	mounted() {

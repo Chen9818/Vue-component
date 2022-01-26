@@ -21,7 +21,7 @@
                   class="btn btn-primary mx-4"
                   @click="openModal('new')"
                 >
-                  增加產品
+                  新增產品
                 </button>
               </div>
               <table class="table table-hover mt-4">
@@ -48,7 +48,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(item,id) in allProducts" :key="item.id">
+                  <tr v-for="(item,id) in showProducts" :key="item.id">
                     <td width="200">{{ item.title }}</td>
                     <td width="120">
                       {{ item.origin_price }}
@@ -66,7 +66,7 @@
                       <button
                         type="button"
                         class="btn btn-success"
-                        @click="showProduct = 
+                        @click="showOneProduct = 
                         item"
                       >
                         查看細節
@@ -92,44 +92,46 @@
                   </tr>
                 </tbody>
               </table>
-              <p>目前有 <span>{{ allProducts.length }}</span> 項產品</p>
+              <p>目前有 <span>{{ showProducts.length }}</span> 項產品</p>
             </div>
             <div class="col-md-4">
               <h2>單一產品細節</h2>
-              <template v-if="showProduct.id">
+              <template v-if="showOneProduct.id">
                   <div class="card mb-3">
                   <img
-                    :src="showProduct.imageUrl"
+                    :src="showOneProduct.imageUrl"
                     class="card-img-top primary-image"
                     alt="主圖"
                   />
                   <div class="card-body">
                     <h5 class="card-title">
-                      {{ showProduct.title }}
+                      {{ showOneProduct.title }}
                       <span class="badge bg-primary ms-2"
-                        >{{ showProduct.category }}</span
+                        >{{ showOneProduct.category }}</span
                       >
                     </h5>
                     <p class="card-text">
-                      商品描述：{{ showProduct.description }}
+                      商品描述：{{ showOneProduct.description }}
                     </p>
-                    <p class="card-text">商品內容：{{ showProduct.content }}</p>
+                    <p class="card-text">商品內容：{{ showOneProduct.content }}</p>
                     <div class="d-flex">
-                      <p class="card-text me-2">{{ showProduct.price }}</p>
+                      <p class="card-text me-2">{{ showOneProduct.price }}</p>
                       <p class="card-text text-secondary">
-                        <del>{{ showProduct.origin_price }}</del>
+                        <del>{{ showOneProduct.origin_price }}</del>
                       </p>
-                      {{ showProduct.unit }} / 元
+                      {{ showOneProduct.unit }} / 元
                     </div>
                   </div>
                 </div>
-                <template v-for="item in showProduct.imagesUrl" :key="item.id">
-                  <img
+                <template v-if="showOneProduct.imagesUrl">
+                  <div v-for="item in showOneProduct.imagesUrl" :key="item.id">
+                    <img
                     :src="item"
                     alt="productImg"
                     class="images m-2"
                     v-if="item"
                   />
+                  </div>
                 </template>
               </template>
               <p class="text-secondary" v-else>請選擇一個商品查看</p>
@@ -199,6 +201,7 @@
                             id="originPrice"
                             min="0"
                             v-model.number="tempProduct.origin_price">
+                            <!--min和max可以設定範圍-->
                           </div>
                         </div>
                         <div class="col-6">
@@ -208,8 +211,8 @@
                             type="number"
                             class="form-control"
                             id="price"
-                            min="0"
-                            v-model.number="tempProduct.price">
+                            min="0"  
+                            v-model.number="tempProduct.price"> 
                           </div>
                         </div>
                         <div class="mb-3">
@@ -244,49 +247,55 @@
                           </div>
                         </div>
                         <div class="mb-3">
-                          <label for="image" class="form-label">主要圖片</label>
+                          <div class="mb-3">多圖新增</div>
+                          <label for="image" class="form-label">圖片網址</label>
                           <input type="text" class="form-control" id="image" v-model="tempProduct.imageUrl">
                           <img class="img-fluid" :src="tempProduct.imageUrl" />
                         </div>
-                        
-                        <!--多圖新增(編輯)-->
-                        <div class="mb-3" v-if="!isNew && tempProduct.imagesUrl.length>0">
-                          <div v-for="(item,id) in tempProduct.imagesUrl" :key="item">
+                        <div class="mb-3">多圖新增</div>
+                        <div v-if="Array.isArray(tempProduct.imagesUrl)">
+                          <!--新增產品--> 
+                          <div
+                            class="mb-1"
+                            v-for="(image, key) in tempProduct.imagesUrl"
+                            :key="key"
+                            >
                             <div class="mb-3">
-                              <label for="sideImage1" class="form-label">次要圖片{{id+1}}</label>
-                              <input type="text" class="form-control" id="sideImage1" v-model="tempProduct.imagesUrl[id]">
-                              <img class="img-fluid" :src="item" />
+                              <label for="imageUrl" class="form-label">圖片網址</label>
+                              <input
+                                v-model="tempProduct.imagesUrl[key]"
+                                type="text"
+                                class="form-control"
+                                placeholder="請輸入圖片連結"
+                              />
                             </div>
+                            <img class="img-fluid" :src="image"/>
+                          </div>
+                          <div v-if="!tempProduct.imagesUrl.length || tempProduct.imagesUrl[tempProduct.imagesUrl.length - 1]">
+                            <button
+                              class="btn btn-outline-primary btn-sm d-block w-100"
+                              @click="tempProduct.imagesUrl.push('')"
+                            >
+                              新增圖片
+                            </button>
+                          </div>
+                          <div v-else>
+                            <button
+                              class="btn btn-outline-danger btn-sm d-block w-100"
+                              @click="tempProduct.imagesUrl.pop()"
+                            >
+                              刪除圖片
+                            </button>
                           </div>
                         </div>
-
-                        <!--多圖新增(新增產品)-->
-                        <div class="mb-3" v-else>
-                          <div class="mb-3">
-                            <label for="sideImage1" class="form-label">次要圖片1</label>
-                            <input type="text" class="form-control" id="sideImage1" v-model="tempProduct.imagesUrl[0]">
-                            <img class="img-fluid" :src="tempProduct.imagesUrl[0]" />
-                          </div>
-                          <div class="mb-3">
-                            <label for="sideImage2" class="form-label">次要圖片2</label>
-                            <input type="text" class="form-control" id="sideImage2" v-model="tempProduct.imagesUrl[1]">
-                            <img class="img-fluid" :src="tempProduct.imagesUrl[1]" />
-                          </div>
-                          <div class="mb-3">
-                            <label for="sideImage3" class="form-label">次要圖片3</label>
-                            <input type="text" class="form-control" id="sideImage3" v-model="tempProduct.imagesUrl[2]">
-                            <img class="img-fluid" :src="tempProduct.imagesUrl[2]" />
-                          </div>
-                          <div class="mb-3">
-                            <label for="sideImage4" class="form-label">次要圖片4</label>
-                            <input type="text" class="form-control" id="sideImage4" v-model="tempProduct.imagesUrl[3]">
-                            <img class="img-fluid" :src="tempProduct.imagesUrl[3]" />
-                          </div>
-                          <div class="mb-3">
-                            <label for="sideImage5" class="form-label">次要圖片5</label>
-                            <input type="text" class="form-control" id="sideImage5" v-model="tempProduct.imagesUrl[4]">
-                            <img class="img-fluid" :src="tempProduct.imagesUrl[4]" />
-                          </div>
+                        <div v-else>
+                          <!--編輯產品--> 
+                          <button
+                            class="btn btn-outline-primary btn-sm d-block w-100"
+                            @click="createImages"
+                          >
+                            新增圖片
+                          </button>
                         </div>
                       </div>
                     </div>

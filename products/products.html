@@ -138,212 +138,214 @@
         </div>
 
         
-      <!--create-Modal  and edit-Modal-->
-      <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
-                <span v-if="isNew">新增產品</span>
-                <span v-else>編輯產品</span>
-              </h5>
-              <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close">
-            </button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="mb-3">
-                        <label for="productName" class="form-label">產品名稱</label>
-                        <input
-                        type="text"
-                        class="form-control"
-                        id="productName"
-                        v-model="tempProduct.title">
-                      </div>
-                      <div class="row">
-                        <div class="col-6">
+        <!--create-Modal  and edit-Modal-->
+        <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel">
+                  <span v-if="isNew">新增產品</span>
+                  <span v-else>編輯產品</span>
+                </h5>
+                <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close">
+              </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="col-12">
                         <div class="mb-3">
-                          <label for="category" class="form-label">分類</label>
+                          <label for="productName" class="form-label">產品名稱</label>
                           <input
                           type="text"
                           class="form-control"
-                          id="category"
-                          v-model="tempProduct.category">
+                          id="productName"
+                          v-model="tempProduct.title">
                         </div>
-                        </div>
-                        <div class="col-6">
-                        <div class="mb-3">
-                          <label for="unit" class="form-label">單位</label>
-                          <input
-                          type="text"
-                          class="form-control"
-                          id="unit"
-                          v-model="tempProduct.unit">
-                        </div>
-                      </div>
-                      </div>
-                      <div class="row">
-                      <div class="col-6">
-                        <div class="mb-3">
-                          <label for="originPrice" class="form-label">原價</label>
-                          <input
-                          type="number"
-                          class="form-control"
-                          id="originPrice"
-                          v-model.number="tempProduct.origin_price">
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="mb-3">
-                          <label for="price" class="form-label">售價</label>
-                          <input
-                          type="number"
-                          class="form-control"
-                          id="price"
-                          v-model.number="tempProduct.price">
-                        </div>
-                      </div>
-                      <div class="mb-3">
-                        <label for="description" class="form-label">產品描述</label>
-                        <textarea 
-                          class="form-control"
-                          id="description"
-                          v-model="tempProduct.description">
-                        </textarea>
-                      </div>
-                      <div class="mb-3">
-                        <label for="content" class="form-label">說明內容</label>
-                        <textarea 
-                          class="form-control"
-                          id="content"
-                          v-model="tempProduct.content">
-                        </textarea>
-                      </div>
-                      <div class="mb-3">
-                        <div class="form-check">
-                          <input
-                            id="is_enabled"
-                            v-model="tempProduct.is_enabled"
-                            class="form-check-input"
-                            type="checkbox"
-                            :true-value="1"
-                            :false-value="0"
-                          />
-                          <label class="form-check-label" for="is_enabled"
-                            >是否啟用</label
-                          >
-                        </div>
-                      </div>
-                      <div class="mb-3">
-                        <label for="image" class="form-label">主要圖片</label>
-                        <input type="text" class="form-control" id="image" v-model="tempProduct.imageUrl">
-                        <img class="img-fluid" :src="tempProduct.imageUrl" />
-                      </div>
-                      
-                      <!--多圖新增(編輯)-->
-                      <div class="mb-3" v-if="!isNew && tempProduct.imagesUrl.length>0">
-                        <div v-for="(item,id) in tempProduct.imagesUrl" :key="item">
+                        <div class="row">
+                          <div class="col-6">
                           <div class="mb-3">
-                            <label for="sideImage1" class="form-label">次要圖片{{id+1}}</label>
-                            <input type="text" class="form-control" id="sideImage1" v-model="tempProduct.imagesUrl[id]">
-                            <img class="img-fluid" :src="item" />
+                            <label for="category" class="form-label">分類</label>
+                            <input
+                            type="text"
+                            class="form-control"
+                            id="category"
+                            v-model="tempProduct.category">
+                          </div>
+                          </div>
+                          <div class="col-6">
+                          <div class="mb-3">
+                            <label for="unit" class="form-label">單位</label>
+                            <input
+                            type="text"
+                            class="form-control"
+                            id="unit"
+                            v-model="tempProduct.unit">
+                          </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-6">
+                          <div class="mb-3">
+                            <label for="originPrice" class="form-label">原價</label>
+                            <input
+                            type="number"
+                            class="form-control"
+                            id="originPrice"
+                            min="0"
+                            v-model.number="tempProduct.origin_price">
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="mb-3">
+                            <label for="price" class="form-label">售價</label>
+                            <input
+                            type="number"
+                            class="form-control"
+                            id="price"
+                            min="0"
+                            v-model.number="tempProduct.price">
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label for="description" class="form-label">產品描述</label>
+                          <textarea 
+                            class="form-control"
+                            id="description"
+                            v-model="tempProduct.description">
+                          </textarea>
+                        </div>
+                        <div class="mb-3">
+                          <label for="content" class="form-label">說明內容</label>
+                          <textarea 
+                            class="form-control"
+                            id="content"
+                            v-model="tempProduct.content">
+                          </textarea>
+                        </div>
+                        <div class="mb-3">
+                          <div class="form-check">
+                            <input
+                              id="is_enabled"
+                              v-model="tempProduct.is_enabled"
+                              class="form-check-input"
+                              type="checkbox"
+                              :true-value="1"  
+                              :false-value="0"
+                            /><!--checkbox 使用 true-value 及 false-value 分別綁定勾選及未勾選時的資料-->
+                            <label class="form-check-label" for="is_enabled"
+                              >是否啟用</label
+                            >
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label for="image" class="form-label">主要圖片</label>
+                          <input type="text" class="form-control" id="image" v-model="tempProduct.imageUrl">
+                          <img class="img-fluid" :src="tempProduct.imageUrl" />
+                        </div>
+                        
+                        <!--多圖新增(編輯)-->
+                        <div class="mb-3" v-if="!isNew && tempProduct.imagesUrl.length>0">
+                          <div v-for="(item,id) in tempProduct.imagesUrl" :key="item">
+                            <div class="mb-3">
+                              <label for="sideImage1" class="form-label">次要圖片{{id+1}}</label>
+                              <input type="text" class="form-control" id="sideImage1" v-model="tempProduct.imagesUrl[id]">
+                              <img class="img-fluid" :src="item" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <!--多圖新增(新增產品)-->
+                        <div class="mb-3" v-else>
+                          <div class="mb-3">
+                            <label for="sideImage1" class="form-label">次要圖片1</label>
+                            <input type="text" class="form-control" id="sideImage1" v-model="tempProduct.imagesUrl[0]">
+                            <img class="img-fluid" :src="tempProduct.imagesUrl[0]" />
+                          </div>
+                          <div class="mb-3">
+                            <label for="sideImage2" class="form-label">次要圖片2</label>
+                            <input type="text" class="form-control" id="sideImage2" v-model="tempProduct.imagesUrl[1]">
+                            <img class="img-fluid" :src="tempProduct.imagesUrl[1]" />
+                          </div>
+                          <div class="mb-3">
+                            <label for="sideImage3" class="form-label">次要圖片3</label>
+                            <input type="text" class="form-control" id="sideImage3" v-model="tempProduct.imagesUrl[2]">
+                            <img class="img-fluid" :src="tempProduct.imagesUrl[2]" />
+                          </div>
+                          <div class="mb-3">
+                            <label for="sideImage4" class="form-label">次要圖片4</label>
+                            <input type="text" class="form-control" id="sideImage4" v-model="tempProduct.imagesUrl[3]">
+                            <img class="img-fluid" :src="tempProduct.imagesUrl[3]" />
+                          </div>
+                          <div class="mb-3">
+                            <label for="sideImage5" class="form-label">次要圖片5</label>
+                            <input type="text" class="form-control" id="sideImage5" v-model="tempProduct.imagesUrl[4]">
+                            <img class="img-fluid" :src="tempProduct.imagesUrl[4]" />
                           </div>
                         </div>
                       </div>
-
-                      <!--多圖新增(新增產品)-->
-                      <div class="mb-3" v-else>
-                        <div class="mb-3">
-                          <label for="sideImage1" class="form-label">次要圖片1</label>
-                          <input type="text" class="form-control" id="sideImage1" v-model="tempProduct.imagesUrl[0]">
-                          <img class="img-fluid" :src="tempProduct.imagesUrl[0]" />
-                        </div>
-                        <div class="mb-3">
-                          <label for="sideImage2" class="form-label">次要圖片2</label>
-                          <input type="text" class="form-control" id="sideImage2" v-model="tempProduct.imagesUrl[1]">
-                          <img class="img-fluid" :src="tempProduct.imagesUrl[1]" />
-                        </div>
-                        <div class="mb-3">
-                          <label for="sideImage3" class="form-label">次要圖片3</label>
-                          <input type="text" class="form-control" id="sideImage3" v-model="tempProduct.imagesUrl[2]">
-                          <img class="img-fluid" :src="tempProduct.imagesUrl[2]" />
-                        </div>
-                        <div class="mb-3">
-                          <label for="sideImage4" class="form-label">次要圖片4</label>
-                          <input type="text" class="form-control" id="sideImage4" v-model="tempProduct.imagesUrl[3]">
-                          <img class="img-fluid" :src="tempProduct.imagesUrl[3]" />
-                        </div>
-                        <div class="mb-3">
-                          <label for="sideImage5" class="form-label">次要圖片5</label>
-                          <input type="text" class="form-control" id="sideImage5" v-model="tempProduct.imagesUrl[4]">
-                          <img class="img-fluid" :src="tempProduct.imagesUrl[4]" />
-                        </div>
-                      </div>
+                    </div>
                     </div>
                   </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-              <button type="button" class="btn btn-primary" @click="updateProduct">確認</button>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" @click="updateProduct">確認</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
 
-      <!--delete-Modal-->
-      <div
-      id="delProductModal"
-      ref="delProductModal"
-      class="modal fade"
-      tabindex="-1"
-      aria-labelledby="delProductModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content border-0">
-          <div class="modal-header">
-            <h5 id="delProductModalLabel" class="modal-title">
-              <span>刪除產品</span>
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            是否刪除
-            <strong class="text-danger">{{ tempProduct.title }}</strong>
-            商品(刪除後將無法恢復)。
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-outline-secondary"
-              data-bs-dismiss="modal"
-            >
-              取消
-            </button>
-            <button type="button" class="btn btn-danger" @click="delProduct">
-              確認刪除
-            </button>
+        <!--delete-Modal-->
+        <div
+        id="delProductModal"
+        ref="delProductModal"
+        class="modal fade"
+        tabindex="-1"
+        aria-labelledby="delProductModalLabel"
+        aria-hidden="true"
+        >
+        <div class="modal-dialog">
+          <div class="modal-content border-0">
+            <div class="modal-header">
+              <h5 id="delProductModalLabel" class="modal-title">
+                <span>刪除產品</span>
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              是否刪除
+              <strong class="text-danger">{{ tempProduct.title }}</strong>
+              商品(刪除後將無法恢復)。
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                data-bs-dismiss="modal"
+              >
+                取消
+              </button>
+              <button type="button" class="btn btn-danger" @click="delProduct">
+                確認刪除
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js"

@@ -1,7 +1,9 @@
+import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js';
+
 let productModal = ""
 let delProductModal = ""
 
-Vue.createApp({
+const app = createApp({
 	data() {
 		return {
 			url:"https://vue3-course-api.hexschool.io/v2",
@@ -10,6 +12,7 @@ Vue.createApp({
 			isNew: false,
 			showProducts:[],	//渲染商品表格用
 			showOneProduct:[],	//查詢特定商品細節用
+			pagination: {},
 			tempProduct: {
 				imagesUrl:[],
 			},
@@ -30,11 +33,14 @@ Vue.createApp({
 		},
 
 		//渲染商品表格用(array)
-		showProduct(){
-			axios.get(`${this.url}/api/${this.apiPath}/admin/products`)
+		showProduct(page = 1){
+			axios.get(`${this.url}/api/${this.apiPath}/admin/products?page=${page}`)
 				.then((res)=>{
-					console.log(res)
-					this.showProducts = res.data.products
+					// console.log(res)
+					const { products, pagination } = res.data;
+					this.showProducts = products;
+					this.pagination = pagination;
+					// this.showProducts = res.data.products
 				})
 				.catch((error)=>{
 					window.location.href = "../login/login.html"
@@ -122,4 +128,17 @@ Vue.createApp({
 		axios.defaults.headers.common["Authorization"] = token
 		this.checkLogin()
 	}
-}).mount("#app")
+})
+
+// 分頁元件
+app.component('pagination', {
+	template: '#pagination',
+	props: ['pages'],
+	methods: {
+	  emitPages(item) {
+		this.$emit('emit-pages', item);
+	  },
+	},
+  });
+
+app.mount('#app');

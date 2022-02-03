@@ -8,7 +8,6 @@ const app = createApp({
 		return {
 			url:"https://vue3-course-api.hexschool.io/v2",
 			apiPath:"wei-z",
-			allProducts:"",		//對商品編輯、新增、刪除用
 			isNew: false,
 			showProducts:[],	//渲染商品表格用
 			showOneProduct:[],	//查詢特定商品細節用
@@ -24,7 +23,6 @@ const app = createApp({
 				.then((res) => {
 					console.log(res)
 					this.showProduct()
-					this.getProducts()
 				})
 				.catch((error) => {
 					window.location.href = "../login/login.html"
@@ -32,15 +30,13 @@ const app = createApp({
 				})
 		},
 
-		//渲染商品表格用(array)
 		showProduct(page = 1){
 			axios.get(`${this.url}/api/${this.apiPath}/admin/products?page=${page}`)
 				.then((res)=>{
-					// console.log(res)
 					const { products, pagination } = res.data;
 					this.showProducts = products;
 					this.pagination = pagination;
-					// this.showProducts = res.data.products
+
 				})
 				.catch((error)=>{
 					window.location.href = "../login/login.html"
@@ -48,19 +44,6 @@ const app = createApp({
 				})
 		},
 
-		//對商品編輯、新增、刪除用(object)
-		getProducts(){
-			axios.get(`${this.url}/api/${this.apiPath}/admin/products/all`)
-				.then((res)=>{
-					console.log(res)
-					this.allProducts = res.data.products
-				})
-				.catch((error)=>{
-					window.location.href = "../login/login.html"
-					alert(error.data.message)
-				})
-		},
-    
 		//新增、編輯、刪除
 		openModal(isNew, item) {
 			if (isNew === "new") {
@@ -78,50 +61,8 @@ const app = createApp({
 				delProductModal.show()
 			}
 		},
-
-		//新增、編輯產品
-		updateProduct(){
-			let url = `${this.url}/api/${this.apiPath}/admin/product`
-			let http = "post"
-
-			if (!this.isNew) {
-				url = `${this.url}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`
-				http = "put"
-			}
-			axios[http](url, { data: this.tempProduct })
-				.then((res) => {
-					alert(res.data.message)
-					productModal.hide()
-					this.showProduct()
-					this.getProducts()
-				})
-				.catch((error) => {
-					alert(error.data.message)
-				})
-		},
-
-		delProduct() {
-			const url = `${this.url}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`
-			axios.delete(url).then((res) => {
-				alert(res.data.message)
-				delProductModal.hide()
-				this.showProduct()
-				this.getProducts()
-			}).catch((error) => {
-				alert(error.data.message)
-			})
-		},
-		createImages() {
-			//編輯產品內新增副圖
-			this.tempProduct.imagesUrl = [];
-			this.tempProduct.imagesUrl.push('');
-		},
 	},
 	mounted() {
-		//利用js操作BS5 modal
-		productModal = new bootstrap.Modal(document.getElementById("productModal"))
-		delProductModal = new bootstrap.Modal(document.getElementById("delProductModal"))
-
 		//在cookie中帶入token
 		// const token = ('; '+document.cookie).split(`; COOKIE_NAME=`).pop().split(';')[3].split("token=")[1];
 		const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, "$1")
@@ -135,10 +76,91 @@ app.component('pagination', {
 	template: '#pagination',
 	props: ['pages'],
 	methods: {
-	  emitPages(item) {
-		this.$emit('emit-pages', item);
-	  },
+		emitPages(item) {
+			this.$emit('emit-pages', item);
+		},
 	},
-  });
+});
+
+
+// 產品新增/編輯元件
+app.component('productModal', {
+	template: '#productModal',
+	props: ['product', 'isNew'],
+	data() {
+		return {
+			apiUrl: 'https://vue3-course-api.hexschool.io/v2',
+			apiPath: 'wei-z',
+			modal: null,
+		};
+	},
+	mounted() {
+		productModal = new bootstrap.Modal(document.getElementById('productModal'));
+	},
+	methods: {
+	updateProduct() {
+		// 新增商品
+		let api = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
+		let httpMethod = 'post';
+		// 編輯商品 
+		if (!this.isNew) {
+			api = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.product.id}`;
+			httpMethod = 'put';
+		}
+		axios[httpMethod](api, { data: this.product })
+		.then((response) => {
+			alert(response.data.message);
+			this.hideModal();
+			this.$emit('update');
+		}).catch((error) => {
+			alert(error.data.message);
+		});
+	},
+	createImages() {
+		this.product.imagesUrl = [];
+		this.product.imagesUrl.push('');
+	},
+	openModal() {
+		productModal.show();
+	},
+	hideModal() {
+		productModal.hide();
+	},
+},
+})
+
+  // 產品刪除元件
+app.component('delProductModal', {
+	template: '#delProductModal',
+	props: ['item'],
+	data() {
+		return {
+			apiUrl: 'https://vue3-course-api.hexschool.io/v2',
+			apiPath: 'wei-z',
+			modal: null,
+		};
+	},
+	mounted() {
+		delProductModal = new bootstrap.Modal(document.getElementById('delProductModal'));
+	},
+	methods: {
+	delProduct() {
+		axios.delete(`${this.apiUrl}/api/${this.apiPath}/admin/product/${this.item.id}`)
+		.then((response) => {
+			this.hideModal();
+			this.$emit('update');
+		}).catch((error) => {
+			alert(error.data.message);
+		});
+	},
+	openModal() {
+		delProductModal.show();
+	},
+	hideModal() {
+		delProductModal.hide();
+	},
+},
+});
+
 
 app.mount('#app');

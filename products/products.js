@@ -36,7 +36,7 @@ const app = createApp({
 					const { products, pagination } = res.data;
 					this.showProducts = products;
 					this.pagination = pagination;
-
+					this.showOneProduct = ""
 				})
 				.catch((error)=>{
 					window.location.href = "../login/login.html"
@@ -53,11 +53,11 @@ const app = createApp({
 				this.isNew = true
 				productModal.show()
 			} else if (isNew === "edit") {
-				this.tempProduct = { ...item }
+				this.tempProduct = JSON.parse(JSON.stringify(item))
 				this.isNew = false
 				productModal.show()     //show出modal，hide隱藏
 			} else if (isNew === "delete") {
-				this.tempProduct = { ...item }
+				this.tempProduct = JSON.parse(JSON.stringify(item))
 				delProductModal.show()
 			}
 		},
@@ -132,7 +132,7 @@ app.component('productModal', {
   // 產品刪除元件
 app.component('delProductModal', {
 	template: '#delProductModal',
-	props: ['item'],
+	props: ['item','currentPage'],
 	data() {
 		return {
 			apiUrl: 'https://vue3-course-api.hexschool.io/v2',
@@ -148,7 +148,7 @@ app.component('delProductModal', {
 		axios.delete(`${this.apiUrl}/api/${this.apiPath}/admin/product/${this.item.id}`)
 		.then((response) => {
 			this.hideModal();
-			this.$emit('update');
+			this.$emit('update',this.currentPage);
 		}).catch((error) => {
 			alert(error.data.message);
 		});
